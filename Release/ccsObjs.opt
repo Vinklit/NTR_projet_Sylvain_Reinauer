@@ -1,0 +1,1 @@
+-l"./evmAudioTemplatecfg.cmd" "./i2c_params.obj" "./evmAudioTemplatecfg_c.obj" "./evmAudioTemplatecfg.obj" "./evmAudioTemplate.obj" "./audio_params.obj" "./audioProcessing.obj" -l"libc.a" 

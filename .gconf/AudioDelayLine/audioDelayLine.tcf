@@ -1,0 +1,121 @@
+utils.loadPlatform("ti.platforms.evmDM6437");
+/* Import settings common to all DM6437 DVSDK examples. */
+//utils.importFile("C:/CCStudio_v3.3/bios_5_31_02/packages/ti/bios/examples/commm/evmDM6437_common.tci");
+
+/* The following DSP/BIOS Features are enabled.  */
+bios.enableMemoryHeaps(prog);
+bios.enableRealTimeAnalysis(prog);
+bios.enableRtdx(prog);
+bios.enableTskManager(prog);
+
+bios.MEM.instance("DDR2").createHeap = 1;
+bios.MEM.BIOSOBJSEG = prog.get("DDR2");
+bios.MEM.MALLOCSEG = prog.get("DDR2");
+bios.TSK.create("TSK_AUDIO");
+bios.TSK.instance("TSK_AUDIO").order = 1;
+bios.TSK.instance("TSK_AUDIO").fxn = prog.extern("audiotTask");
+
+/* Create semaphores for Transmit/Receive: */
+bios.SEM.create("semRx");
+bios.SEM.create("semTx");
+
+/* Enable the GIO module: */
+bios.GIO.ENABLEGIO = 1;
+
+/* PSP configuration */
+
+/* Create user device for I2C needed by audio drivers */
+bios.UDEV.create("I2C0");
+bios.UDEV.instance("I2C0").fxnTableType = "IOM_Fxns";
+bios.UDEV.instance("I2C0").params = prog.extern("I2C_devParams");
+bios.UDEV.instance("I2C0").fxnTable = prog.extern("I2CMD_FXNS");
+
+/* udevCodec (For AIC with McBSP) */
+bios.UDEV.create("udevCodec");
+bios.UDEV.instance("udevCodec").fxnTableType = "IOM_Fxns";
+bios.UDEV.instance("udevCodec").fxnTable = prog.extern("EVMDM6437_EDMA_AIC33_FXNS");
+bios.UDEV.instance("udevCodec").initFxn = prog.extern("EVMDM6437_EDMA_AIC33_init0");
+bios.UDEV.instance("udevCodec").params = null;
+bios.UDEV.instance("udevCodec").deviceId = 0;
+bios.UDEV.instance("udevCodec").deviceGlobalDataPtr = null;
+
+/* Enable ECM Handler */
+bios.ECM.ENABLE = 1;
+
+/* ECM configuration - manually Reflect these settings in soc.h */
+bios.HWI.instance("HWI_INT7").interruptSelectNumber = 0;
+bios.HWI.instance("HWI_INT8").interruptSelectNumber = 1;
+bios.HWI.instance("HWI_INT9").interruptSelectNumber = 2;
+bios.HWI.instance("HWI_INT10").interruptSelectNumber = 3;
+bios.MEM.STACKSIZE = 0x1000;
+bios.MEM.FARSEG = prog.get("DDR2");
+bios.MEM.PINITSEG = prog.get("DDR2");
+bios.MEM.DATASEG = prog.get("DDR2");
+bios.MEM.BSSSEG = prog.get("DDR2");
+bios.MEM.TEXTSEG = prog.get("DDR2");
+bios.MEM.TEXTSEG = prog.get("IRAM");
+bios.MEM.ARGSSEG = prog.get("DDR2");
+bios.MEM.STACKSEG = prog.get("DDR2");
+bios.MEM.GBLINITSEG = prog.get("DDR2");
+bios.MEM.TRCDATASEG = prog.get("DDR2");
+bios.MEM.SYSDATASEG = prog.get("DDR2");
+bios.MEM.OBJSEG = prog.get("DDR2");
+bios.MEM.BIOSSEG = prog.get("DDR2");
+bios.MEM.SYSINITSEG = prog.get("DDR2");
+bios.MEM.HWISEG = prog.get("DDR2");
+bios.MEM.HWIVECSEG = prog.get("DDR2");
+bios.MEM.RTDXTEXTSEG = prog.get("DDR2");
+bios.MEM.SWITCHSEG = prog.get("DDR2");
+bios.MEM.TEXTSEG = prog.get("DDR2");
+bios.MEM.TRCDATASEG = prog.get("IRAM");
+bios.MEM.STACKSEG = prog.get("DDR2");
+bios.MEM.ARGSSEG = prog.get("DDR2");
+bios.MEM.ARGSSEG = prog.get("IRAM");
+bios.MEM.STACKSEG = prog.get("IRAM");
+bios.MEM.GBLINITSEG = prog.get("IRAM");
+bios.MEM.SYSDATASEG = prog.get("IRAM");
+bios.MEM.OBJSEG = prog.get("IRAM");
+bios.MEM.BIOSSEG = prog.get("IRAM");
+bios.MEM.SYSINITSEG = prog.get("IRAM");
+bios.MEM.HWISEG = prog.get("IRAM");
+bios.MEM.HWIVECSEG = prog.get("IRAM");
+bios.MEM.RTDXTEXTSEG = prog.get("IRAM");
+bios.MEM.TEXTSEG = prog.get("IRAM");
+bios.MEM.SWITCHSEG = prog.get("IRAM");
+bios.MEM.BSSSEG = prog.get("IRAM");
+bios.MEM.FARSEG = prog.get("IRAM");
+bios.MEM.PINITSEG = prog.get("IRAM");
+bios.MEM.DATASEG = prog.get("IRAM");
+bios.LOG.create("trace");
+bios.MEM.ARGSSEG = prog.get("DDR2");
+bios.MEM.STACKSEG = prog.get("DDR2");
+bios.MEM.GBLINITSEG = prog.get("DDR2");
+bios.MEM.TRCDATASEG = prog.get("DDR2");
+bios.MEM.SYSDATASEG = prog.get("DDR2");
+bios.MEM.OBJSEG = prog.get("DDR2");
+bios.MEM.BIOSSEG = prog.get("DDR2");
+bios.MEM.SYSINITSEG = prog.get("DDR2");
+bios.MEM.HWISEG = prog.get("DDR2");
+bios.MEM.HWIVECSEG = prog.get("DDR2");
+bios.MEM.RTDXTEXTSEG = prog.get("DDR2");
+bios.MEM.SWITCHSEG = prog.get("DDR2");
+bios.MEM.BSSSEG = prog.get("DDR2");
+bios.MEM.FARSEG = prog.get("DDR2");
+bios.MEM.CINITSEG = prog.get("DDR2");
+bios.MEM.PINITSEG = prog.get("DDR2");
+bios.MEM.CONSTSEG = prog.get("DDR2");
+bios.MEM.DATASEG = prog.get("DDR2");
+bios.MEM.CIOSEG = prog.get("DDR2");
+bios.MEM.TEXTSEG = prog.get("DDR2");
+bios.MEM.FARSEG = prog.get("IRAM");
+bios.MEM.SYSDATASEG = prog.get("IRAM");
+bios.MEM.HWIVECSEG = prog.get("IRAM");
+bios.QUE.create("QUE_free");
+bios.QUE.create("QUE_msg");
+bios.MEM.instance("DDR2").enableHeapLabel = 1;
+bios.MEM.instance("DDR2").heapLabel = prog.extern("_SEG_DDR2", "asm");
+bios.MEM.instance("DDR2").heapSize = 0x00800000;
+// !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
+
+prog.gen();
+

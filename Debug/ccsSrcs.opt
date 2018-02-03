@@ -1,0 +1,1 @@
+"../audio_params.c" "../evmAudioTemplate.c" "./evmAudioTemplatecfg.s??" "./evmAudioTemplatecfg_c.c" "../i2c_params.c" 
