@@ -160,8 +160,11 @@ void audiotTask()
     /* Waiting for receive buffer and transmit buffer */
     SEM_pend(&semRx, SYS_FOREVER);// attente sem rx
     SEM_pend(&semTx, SYS_FOREVER);// attente sem tx
+	SEM_pend(&config, SYS_FOREVER);
 
 	audioProcess(rxBuf[rxDone],txBuf[txDone],NUMSAMPLES, mDelay, mode);
+	
+	SEM_post(&semConfig);
   			
  	// Release input and output buffers to audio drivers
     GIO_submit(inChan, IOM_READ, rxBuf[rxDone], &rxSize, &appReadCb);
@@ -177,26 +180,48 @@ void audiotTask()
 //*****************************************************************************
 // Task setDelay
 //*****************************************************************************
-void setDelayTask(int arg0, int arg1){
+void getDipStatus(int arg0, int arg1){
 	while(1){
-		if(!EVMDM6437_DIP_get(DIP0)){ 										// DIP0 down -> augmentation
-			mDelay = (mDelay-STEP_DELAY) <= DELAY_2S ? DELAY_2S : mDelay-STEP_DELAY;
-
-		}
-		else if(!EVMDM6437_DIP_get(DIP1)){ 									//DIP1 down -> diminution
-			mDelay = (mDelay+STEP_DELAY) >= NO_DELAY ? NO_DELAY : mDelay+STEP_DELAY;
-		}
+		SEM_pend(&semDip, SYS_FOREVER);
+		statusDIP0 = EVMDM6437_DIP_get(DIP0);
+		statusDIP1 = EVMDM6437_DIP_get(DIP1);
+		statusDIP2 = EVMDM6437_DIP_get(DIP2);
+		statusDIP3 = EVMDM6437_DIP_get(DIP3);	
+		SEM_post(&semDip);
 		TSK_sleep(100);
 	}
 }
 //*****************************************************************************
 // Task setDelay
 //*****************************************************************************
-void setModeTask(int arg0, int arg1){
+void setConfigTask(int arg0, int arg1){
 	while(1){
-		mode = mDelay == NO_DELAY ? mode_LOOPBACK : (eMode)EVMDM6437_DIP_get(DIP3);
-		TSK_sleep(100);
+		SEM_pend(&semDip, SYS_FOREVER);
+		SEM_pend(&semConfig, SYS_FOREVER);
+		setDelay();
+		setMode();
+		SEM_post(&semDip);
+		SEM_post(&semConfig);
+		TSK_sleep(10);
 	}
+}
+//*****************************************************************************
+// Fonction setDelay
+//*****************************************************************************
+void setDelay(void){
+	if(!statusDIP0 && statusDIP1){ 										// DIP0 down -> augmentation
+			mDelay = (mDelay-STEP_DELAY) <= DELAY_2S ? DELAY_2S : mDelay-STEP_DELAY;
+
+		}
+	if(statusDIP0 && !statusDIP1)){ 									//DIP1 down -> diminution
+			mDelay = (mDelay+STEP_DELAY) >= NO_DELAY ? NO_DELAY : mDelay+STEP_DELAY;
+		}
+}
+//*****************************************************************************
+// Fonction setMode
+//*****************************************************************************
+void setMode(void){
+		mode = (mDelay == NO_DELAY) ? mode_LOOPBACK : statusDIP3;
 }
 
 /**
