@@ -217,11 +217,11 @@ _EVENT125 = EVENT125;
 _EVENT126 = EVENT126;
 _EVENT127 = EVENT127;
 _KNL_swi = KNL_swi;
-_TSK_AUDIO = TSK_AUDIO;
 _TSK_idle = TSK_idle;
+_TSK_AUDIO = TSK_AUDIO;
 _TSK_ALIVE = TSK_ALIVE;
-_TSK_SETDELAY = TSK_SETDELAY;
-_TSK_SETMODE = TSK_SETMODE;
+_TSK_CONFIG_PROCESS = TSK_CONFIG_PROCESS;
+_TSK_GET_DIP_STATUS = TSK_GET_DIP_STATUS;
 _IDL_cpuLoad = IDL_cpuLoad;
 _LNK_dataPump = LNK_dataPump;
 _RTA_dispatcher = RTA_dispatcher;
@@ -229,6 +229,8 @@ _LOG_system = LOG_system;
 _trace = trace;
 _semRx = semRx;
 _semTx = semTx;
+_semConfig = semConfig;
+_semDip = semDip;
 _IDL_busyObj = IDL_busyObj;
 
 /* MODULE GBL */
@@ -411,12 +413,12 @@ SECTIONS {
             *(.TSK_ALIVE$stk)
         } > IRAM
 
-        .TSK_SETDELAY$stk: {
-            *(.TSK_SETDELAY$stk)
+        .TSK_CONFIG_PROCESS$stk: {
+            *(.TSK_CONFIG_PROCESS$stk)
         } > IRAM
 
-        .TSK_SETMODE$stk: {
-            *(.TSK_SETMODE$stk)
+        .TSK_GET_DIP_STATUS$stk: {
+            *(.TSK_GET_DIP_STATUS$stk)
         } > IRAM
 
         /* LOG_system buffer */

@@ -20,12 +20,11 @@
 sChannel recBuffer[BUFFER_SIZE] = {0};
 uint32 indiceWR = 0;
 uint32 indiceRD = 0;
-uint32 thisDelay = NO_DELAY;
 
 //*****************************************************************************
 // Fonction mode LOOPBACK
 //*****************************************************************************
-void audioLoopback(int16 *rxBuf, int16 *txBuf, uint32 numSamples) {
+void audioLoopback(int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay) {
 	memcpy(txBuf,rxBuf,numSamples*sizeof(int16));
   	return;
 }
@@ -33,37 +32,37 @@ void audioLoopback(int16 *rxBuf, int16 *txBuf, uint32 numSamples) {
 //*****************************************************************************
 // Fonction mode DELAY
 //*****************************************************************************
-void fonctionDelay (int16 *rxBuf, int16 *txBuf, uint32 numSamples){
-	int16 indice;
+void fonctionDelay (int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay){
+	uint16 indice;
 	pChannel pRxIndice = (pChannel)rxBuf;
 	pChannel pTxIndice = (pChannel)txBuf;
-	indiceRD = movePointer(indiceWR, thisDelay);
+	indiceRD = moveIndice(indiceWR, *myDelay, BUFFER_SIZE);
 
 	for(indice = 0; indice < numSamples/NB_CHANNELS; indice++){
 		*(recBuffer+indiceWR) = *(pRxIndice+indice);
 		(pTxIndice+indice)->channel_L = (recBuffer+indiceWR)->channel_L + ((recBuffer+indiceRD)->channel_L >> GAIN_ALPHA);
 		(pTxIndice+indice)->channel_R = (recBuffer+indiceWR)->channel_R+ ((recBuffer+indiceRD)->channel_R >> GAIN_ALPHA);
-		indiceRD = movePointer(indiceRD, 1);
-		indiceWR = movePointer(indiceWR, 1);
+		indiceRD = moveIndice(indiceRD, ONE_STEP, BUFFER_SIZE);
+		indiceWR = moveIndice(indiceWR, ONE_STEP, BUFFER_SIZE);
 	}
 }
 
 //*****************************************************************************
 // Fonction mode REVERB
 //*****************************************************************************
-void fonctionReverb (int16 *rxBuf, int16 *txBuf, uint32 numSamples){
-	int16 indice;
+void fonctionReverb (int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay){
+	uint16 indice;
 	pChannel pRxIndice = (pChannel)rxBuf;
 	pChannel pTxIndice = (pChannel)txBuf;
-	indiceRD = movePointer(indiceWR, thisDelay);
+	indiceRD = moveIndice(indiceWR, *myDelay, BUFFER_SIZE);
 
 	for(indice = 0; indice < numSamples/NB_CHANNELS; indice++){
 		(recBuffer+indiceWR)->channel_L = (pRxIndice+indice)->channel_L + ((recBuffer+indiceRD)->channel_L >> GAIN_BETA);
 		(recBuffer+indiceWR)->channel_R = (pRxIndice+indice)->channel_R + ((recBuffer+indiceRD)->channel_R >> GAIN_BETA);
 		(pTxIndice+indice)->channel_L = (recBuffer+indiceWR)->channel_L;
 		(pTxIndice+indice)->channel_R = (recBuffer+indiceWR)->channel_R;
-		indiceRD = movePointer(indiceRD, 1);
-		indiceWR = movePointer(indiceWR, 1);
+		indiceRD = moveIndice(indiceRD, ONE_STEP, BUFFER_SIZE);
+		indiceWR = moveIndice(indiceWR, ONE_STEP, BUFFER_SIZE);
 	}
 }
 
@@ -87,16 +86,18 @@ uint16 autoGainControl(int32 value){
 }
 
 //*****************************************************************************
-// movePointer
+// FUNCTION moveIndice
 //*****************************************************************************
-uint32 movePointer(uint32 position, uint32 step){
-	return (position+step)%BUFFER_SIZE;
+uint32 moveIndice(uint32 indice, uint32 step, uint32 bufferSize){
+	return (indice+step) % bufferSize;
 }
 //*****************************************************************************
-// GetProcess
+// FUNCTION GetProcess
+// mode is protected by semConfig
+// return the right pointer of function selected with mode
 //*****************************************************************************
-ptrFonction getProcess(eMode mode){
-	switch (mode){
+ptrFonction getProcess(eMode* mode){
+	switch (*mode){
 		case mode_DELAY:
 			return fonctionDelay;
 		case mode_REVERB:
@@ -108,11 +109,11 @@ ptrFonction getProcess(eMode mode){
 		}
 }
 //*****************************************************************************
-// audioProcess
+// FUNCTION audioProcess
+// call getProcess to have in return a pointer of the right function
 //*****************************************************************************
-void audioProcess(int16 *rxBuf, int16 *txBuf, uint32 numSamples, uint32 dDelay, eMode mode) {
-	thisDelay = dDelay;
-	(*(getProcess(mode)))(rxBuf, txBuf, numSamples);
+void audioProcess(int16 *rxBuf, int16 *txBuf, uint32 numSamples, eMode* mode, int32* myDelay) {
+	(*getProcess(mode))(rxBuf, txBuf, numSamples, myDelay);
 }
 
 

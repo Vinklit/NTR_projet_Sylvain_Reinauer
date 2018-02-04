@@ -23,12 +23,14 @@ extern far SWI_Obj KNL_swi;
 extern far TSK_Obj TSK_idle;
 extern far TSK_Obj TSK_AUDIO;
 extern far TSK_Obj TSK_ALIVE;
-extern far TSK_Obj TSK_SETDELAY;
-extern far TSK_Obj TSK_SETMODE;
+extern far TSK_Obj TSK_CONFIG_PROCESS;
+extern far TSK_Obj TSK_GET_DIP_STATUS;
 extern far LOG_Obj LOG_system;
 extern far LOG_Obj trace;
 extern far SEM_Obj semRx;
 extern far SEM_Obj semTx;
+extern far SEM_Obj semConfig;
+extern far SEM_Obj semDip;
 extern far STS_Obj IDL_busyObj;
 
 

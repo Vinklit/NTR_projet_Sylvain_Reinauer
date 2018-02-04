@@ -152,6 +152,23 @@ bios.TSK.instance("TSK_SETMODE").order = 5;
 bios.TSK.instance("TSK_SETMODE").comment = "_setModeTask";
 bios.TSK.instance("TSK_SETMODE").comment = "<add comments here>";
 bios.TSK.instance("TSK_SETMODE").fxn = prog.extern("setModeTask");
+bios.TSK.instance("TSK_idle").order = 1;
+bios.TSK.instance("TSK_AUDIO").order = 2;
+bios.TSK.instance("TSK_SETMODE").destroy();
+bios.TSK.create("TSK_CONFIG_PROCESS");
+bios.TSK.instance("TSK_CONFIG_PROCESS").order = 6;
+bios.TSK.instance("TSK_CONFIG_PROCESS").fxn = prog.extern("setModeTask");
+bios.TSK.instance("TSK_CONFIG_PROCESS").order = 4;
+bios.TSK.instance("TSK_SETDELAY").destroy();
+bios.TSK.create("TSK_GET_DIP_STATUS");
+bios.TSK.instance("TSK_GET_DIP_STATUS").order = 6;
+bios.TSK.instance("TSK_GET_DIP_STATUS").fxn = prog.extern("setDelayTask");
+bios.TSK.instance("TSK_GET_DIP_STATUS").fxn = prog.extern("getDipStatusTask");
+bios.TSK.instance("TSK_CONFIG_PROCESS").fxn = prog.extern("configProcessTask");
+bios.SEM.create("semConfig");
+bios.SEM.instance("semConfig").count = 1;
+bios.SEM.create("semDip");
+bios.SEM.instance("semDip").count = 1;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 prog.gen();

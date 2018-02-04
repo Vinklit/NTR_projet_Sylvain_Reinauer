@@ -5,7 +5,7 @@
 ;; INPUT evmAudioTemplate.cdb
 
 ;; CONFIGURATION/VERSION INFORMATION
-	.asg "Sat Feb 03 21:23:39 2018", VERS$DATE
+	.asg "Sun Feb 04 21:17:46 2018", VERS$DATE
 
 ;; PROLOGUE
 	.include evmAudioTemplatecfg.h62
@@ -77,7 +77,7 @@ LOG$NUMOF           .set 2
 LOG$SETOF           .set 00H
 PIP$NUMOF           .set 0
 PIP$SETOF           .set 00H
-SEM$NUMOF           .set 2
+SEM$NUMOF           .set 4
 SEM$SETOF           .set 00H
 MBX$NUMOF           .set 0
 MBX$SETOF           .set 00H
@@ -2113,39 +2113,6 @@ HOOK$SETOF          .set 00H
 	.asg 00H, _unittype
 	SWI_Obj 1, KNL_swi, 0, _function, _pri, _mailbox, _arg0, _arg1, _dorta, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
 
-;; ======== TSK_Obj TSK_AUDIO ========
-;; <add comments here>
-;;
-;; TSK_Obj TSK_AUDIO (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
-	.global TSK_AUDIO
-	.asg _audiotTask, _iFXN
-	.asg 00H, _iARG0
-	.asg 00H, _iARG1
-	.asg 00H, _iARG2
-	.asg 00H, _iARG3
-	.asg 00H, _iARG4
-	.asg 00H, _iARG5
-	.asg 00H, _iARG6
-	.asg 00H, _iARG7
-	.asg 01H, _iAUTOSTK
-	.asg null, _iMANSTK
-	.asg 0400H, _iSTKSZ
-	.asg IRAM, _iSTKSEG
-	.asg 02H, _iPRI
-	.asg 00H, _iENV
-	.asg 01H, _iEXITFLAG
-	.asg 00H, _iUSETSKNAME
-	.asg 00H, _iSTATREG
-	.asg 01H, _Order
-	.asg 02H, _filter
-	.asg "%g inst", _maxformat
-	.asg "%g inst", _sumformat
-	.asg "%.2f inst", _avgformat
-	.asg 01H, _filtmaxmult
-	.asg 01H, _filtsummult
-	.asg 00H, _unittype
-	TSK_Obj 1, TSK_AUDIO, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
-
 ;; ======== TSK_Obj TSK_idle ========
 ;; This is the idle task; it only runs when no other task is ready
 ;;
@@ -2169,7 +2136,7 @@ HOOK$SETOF          .set 00H
 	.asg 01H, _iEXITFLAG
 	.asg 00H, _iUSETSKNAME
 	.asg 00H, _iSTATREG
-	.asg 02H, _Order
+	.asg 01H, _Order
 	.asg 02H, _filter
 	.asg "%g inst", _maxformat
 	.asg "%g inst", _sumformat
@@ -2178,6 +2145,39 @@ HOOK$SETOF          .set 00H
 	.asg 01H, _filtsummult
 	.asg 00H, _unittype
 	TSK_Obj 1, TSK_idle, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
+
+;; ======== TSK_Obj TSK_AUDIO ========
+;; <add comments here>
+;;
+;; TSK_Obj TSK_AUDIO (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
+	.global TSK_AUDIO
+	.asg _audiotTask, _iFXN
+	.asg 00H, _iARG0
+	.asg 00H, _iARG1
+	.asg 00H, _iARG2
+	.asg 00H, _iARG3
+	.asg 00H, _iARG4
+	.asg 00H, _iARG5
+	.asg 00H, _iARG6
+	.asg 00H, _iARG7
+	.asg 01H, _iAUTOSTK
+	.asg null, _iMANSTK
+	.asg 0400H, _iSTKSZ
+	.asg IRAM, _iSTKSEG
+	.asg 02H, _iPRI
+	.asg 00H, _iENV
+	.asg 01H, _iEXITFLAG
+	.asg 00H, _iUSETSKNAME
+	.asg 00H, _iSTATREG
+	.asg 02H, _Order
+	.asg 02H, _filter
+	.asg "%g inst", _maxformat
+	.asg "%g inst", _sumformat
+	.asg "%.2f inst", _avgformat
+	.asg 01H, _filtmaxmult
+	.asg 01H, _filtsummult
+	.asg 00H, _unittype
+	TSK_Obj 1, TSK_AUDIO, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
 
 ;; ======== TSK_Obj TSK_ALIVE ========
 ;; <add comments here>
@@ -2212,12 +2212,12 @@ HOOK$SETOF          .set 00H
 	.asg 00H, _unittype
 	TSK_Obj 1, TSK_ALIVE, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
 
-;; ======== TSK_Obj TSK_SETDELAY ========
+;; ======== TSK_Obj TSK_CONFIG_PROCESS ========
 ;; <add comments here>
 ;;
-;; TSK_Obj TSK_SETDELAY (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
-	.global TSK_SETDELAY
-	.asg _setDelayTask, _iFXN
+;; TSK_Obj TSK_CONFIG_PROCESS (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
+	.global TSK_CONFIG_PROCESS
+	.asg _configProcessTask, _iFXN
 	.asg 00H, _iARG0
 	.asg 00H, _iARG1
 	.asg 00H, _iARG2
@@ -2243,14 +2243,14 @@ HOOK$SETOF          .set 00H
 	.asg 01H, _filtmaxmult
 	.asg 01H, _filtsummult
 	.asg 00H, _unittype
-	TSK_Obj 1, TSK_SETDELAY, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
+	TSK_Obj 1, TSK_CONFIG_PROCESS, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
 
-;; ======== TSK_Obj TSK_SETMODE ========
+;; ======== TSK_Obj TSK_GET_DIP_STATUS ========
 ;; <add comments here>
 ;;
-;; TSK_Obj TSK_SETMODE (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
-	.global TSK_SETMODE
-	.asg _setModeTask, _iFXN
+;; TSK_Obj TSK_GET_DIP_STATUS (iFXN, iARG0, iARG1, iARG2, iARG3, iARG4, iARG5, iARG6, iARG7, iAUTOSTK, iMANSTK, iSTKSZ, iSTKSEG, iPRI, iENV, iEXITFLAG, iUSETSKNAME, iSTATREG, Order, filter, maxformat, sumformat, avgformat, filtmaxmult, filtsummult, unittype)
+	.global TSK_GET_DIP_STATUS
+	.asg _getDipStatusTask, _iFXN
 	.asg 00H, _iARG0
 	.asg 00H, _iARG1
 	.asg 00H, _iARG2
@@ -2268,7 +2268,7 @@ HOOK$SETOF          .set 00H
 	.asg 01H, _iEXITFLAG
 	.asg 00H, _iUSETSKNAME
 	.asg 00H, _iSTATREG
-	.asg 05H, _Order
+	.asg 06H, _Order
 	.asg 02H, _filter
 	.asg "%g inst", _maxformat
 	.asg "%g inst", _sumformat
@@ -2276,7 +2276,7 @@ HOOK$SETOF          .set 00H
 	.asg 01H, _filtmaxmult
 	.asg 01H, _filtsummult
 	.asg 00H, _unittype
-	TSK_Obj 1, TSK_SETMODE, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
+	TSK_Obj 1, TSK_GET_DIP_STATUS, 0, _iFXN, _iARG0, _iARG1, _iARG2, _iARG3, _iARG4, _iARG5, _iARG6, _iARG7, _iAUTOSTK, _iMANSTK, _iSTKSZ, _iSTKSEG, _iPRI, _iENV, _iEXITFLAG, _iUSETSKNAME, _iSTATREG, _Order, _filter, _maxformat, _sumformat, _avgformat, _filtmaxmult, _filtsummult, _unittype
 
 ;; ======== IDL_Obj IDL_cpuLoad ========
 ;; This object is required by the system to acquire CPU load data
@@ -2344,6 +2344,22 @@ HOOK$SETOF          .set 00H
 	.global semTx
 	.asg 00H, _iCount
 	SEM_Obj 1, semTx, 0, _iCount
+
+;; ======== SEM_Obj semConfig ========
+;; <add comments here>
+;;
+;; SEM_Obj semConfig (iCount)
+	.global semConfig
+	.asg 01H, _iCount
+	SEM_Obj 1, semConfig, 0, _iCount
+
+;; ======== SEM_Obj semDip ========
+;; <add comments here>
+;;
+;; SEM_Obj semDip (iCount)
+	.global semDip
+	.asg 01H, _iCount
+	SEM_Obj 1, semDip, 0, _iCount
 
 ;; ======== STS_Obj IDL_busyObj ========
 ;; This object is required by the system to accumulate CPU load statistics

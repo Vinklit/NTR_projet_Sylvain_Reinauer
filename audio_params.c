@@ -2,7 +2,6 @@
  * ======== audio_params.c ========
  *
  */
-
 #include <psp_audio.h>
 #include "dsp_types.h"
 #include "audioProcessing.h"

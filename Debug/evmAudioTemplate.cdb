@@ -111,7 +111,7 @@ type GlobalStatus {
         prop Visible :: 0
         prop Writable :: 1
     }
-    global DATE :: "Sat Feb 03 21:23:39 2018" { 
+    global DATE :: "Sun Feb 04 21:17:46 2018" { 
         prop Type :: "{21455EA3-B96A-11cf-9BFE-0000C0AC14C7}"
         prop Visible :: 0
         prop Writable :: 0
@@ -7258,7 +7258,7 @@ object TSK_idle :: TSK {
     param iENV :: 0
     param iEXITFLAG :: 1
     param iUSETSKNAME :: 0
-    param Order :: 2
+    param Order :: 1
     param filter :: 2
     param maxformat :: "%g inst"
     param sumformat :: "%g inst"
@@ -8264,7 +8264,7 @@ type SEM {
         prop Writable :: 0
         prop NoGen :: 1
     }
-    global gNumOf :: 2 { 
+    global gNumOf :: 4 { 
         prop Visible :: 0
         prop Writable :: 0
         prop NoGen :: 1
@@ -10514,7 +10514,7 @@ object TSK_AUDIO :: TSK {
     param iENV :: 0
     param iEXITFLAG :: 1
     param iUSETSKNAME :: 0
-    param Order :: 1
+    param Order :: 2
     param filter :: 2
     param maxformat :: "%g inst"
     param sumformat :: "%g inst"
@@ -10622,13 +10622,13 @@ object TSK_ALIVE :: TSK {
     param unittype :: 0
 }
 
-object TSK_SETDELAY :: TSK {
+object TSK_CONFIG_PROCESS :: TSK {
     param iComment :: "<add comments here>"
     param iIsUsed :: 1
     param iId :: 0
     param iDelUser :: "USER"
     param iDelMsg :: "ok"
-    param iFXN :: @_setDelayTask
+    param iFXN :: @_configProcessTask
     param iARG0 :: 0
     param iARG1 :: 0
     param iARG2 :: 0
@@ -10654,13 +10654,13 @@ object TSK_SETDELAY :: TSK {
     param unittype :: 0
 }
 
-object TSK_SETMODE :: TSK {
+object TSK_GET_DIP_STATUS :: TSK {
     param iComment :: "<add comments here>"
     param iIsUsed :: 1
     param iId :: 0
     param iDelUser :: "USER"
     param iDelMsg :: "ok"
-    param iFXN :: @_setModeTask
+    param iFXN :: @_getDipStatusTask
     param iARG0 :: 0
     param iARG1 :: 0
     param iARG2 :: 0
@@ -10676,7 +10676,7 @@ object TSK_SETMODE :: TSK {
     param iENV :: 0
     param iEXITFLAG :: 1
     param iUSETSKNAME :: 0
-    param Order :: 5
+    param Order :: 6
     param filter :: 2
     param maxformat :: "%g inst"
     param sumformat :: "%g inst"
@@ -10684,5 +10684,23 @@ object TSK_SETMODE :: TSK {
     param filtmaxmult :: 1
     param filtsummult :: 1
     param unittype :: 0
+}
+
+object semConfig :: SEM {
+    param iComment :: "<add comments here>"
+    param iIsUsed :: 1
+    param iId :: 0
+    param iDelUser :: "USER"
+    param iDelMsg :: "ok"
+    param iCount :: 1
+}
+
+object semDip :: SEM {
+    param iComment :: "<add comments here>"
+    param iIsUsed :: 1
+    param iId :: 0
+    param iDelUser :: "USER"
+    param iDelMsg :: "ok"
+    param iCount :: 1
 }
 

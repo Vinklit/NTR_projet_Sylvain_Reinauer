@@ -15,6 +15,8 @@
 #define AUDIOPROCESSING_H_
 
 #include "dsp_types.h"
+#include "evmAudioTemplate.h"
+
 
 //*****************************************************************************
 // Preprocessor symbols
@@ -31,7 +33,8 @@
 #define GAIN_ALPHA 				1
 #define GAIN_BETA				1
 #define STEP_DELAY				4410   // Step to up or down delay ~0.1s
-#define DELAY_2S				1
+#define ONE_STEP 				1
+#define DELAY_MAX				1
 #define NO_DELAY				BUFFER_SIZE
 #define VALUE16b_MAX			32767
 #define VALUE16b_MIN			-32768
@@ -46,7 +49,7 @@
 //*****************************************************************************
 // New types
 //*****************************************************************************
-typedef void (*ptrFonction)(int16*, int16*, uint32);
+typedef void (*ptrFonction)(int16*, int16*, uint32, int32*);
 
 //*****************************************************************************
 // Enumerations
@@ -67,11 +70,12 @@ typedef struct{
 //*****************************************************************************
 // Function's prototypes
 //*****************************************************************************
-void audioLoopback(int16 *rxBuf, int16 *txBuf, uint32 numSamples);
-void audioProcess(int16 *rxBuf, int16 *txBuf, uint32 numSamples, uint32 mDelay, eMode mode);
-void fonctionDelay (int16 *rxBuf, int16 *txBuf, uint32 numSamples);
-void fonctionReverb (int16 *rxBuf, int16 *txBuf, uint32 numSamples);
-uint32 movePointer(uint32 indiceWR, uint32 dDelay);
-ptrFonction getProcess(eMode mode);
+void audioLoopback(int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay);
+void audioProcess(int16 *rxBuf, int16 *txBuf, uint32 numSamples, eMode* mode, int32* myDelay);
+void fonctionDelay(int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay);
+void fonctionReverb(int16 *rxBuf, int16 *txBuf, uint32 numSamples, int32* myDelay);
+uint32 moveIndice(uint32 indice, uint32 step, uint32 bufferSize);
+ptrFonction getProcess(eMode* mode);
+
 
 #endif /* AUDIOPROCESSING_H_ */

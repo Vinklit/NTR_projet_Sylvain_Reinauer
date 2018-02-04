@@ -86,6 +86,8 @@
 	.global	_getDeepSwTask
 	.global	_setDelayTask
 	.global	_setModeTask
+	.global	_getDipStatusTask
+	.global	_configProcessTask
 
 ;; MODULE PARAMETERS
 GBL$                .set 1

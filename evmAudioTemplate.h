@@ -20,10 +20,13 @@
 #include <gio.h>
 #include <iom.h>
 
-#define DIP0 0
-#define DIP1 1
-#define DIP2 2
-#define DIP3 3
+#define DIP0	 	0
+#define DIP1 		1
+#define DIP2 		2
+#define DIP3 		3
+
+#define DIP_UP 		1
+#define DIP_DOWN 	0
 
 #define LED0 0
 #define LED1 1
@@ -59,6 +62,8 @@ static void startCapture();
 static void createChannels();
 static void rxCallback(Ptr arg, int32 status, Ptr bufp, uint32 size);
 static void txCallback(Ptr arg, int32 status, Ptr bufp, uint32 size);
+void setDelay(void);
+void setMode(void);
 
 /* Needed to initialize audio driver */
 extern int32 edma3init();

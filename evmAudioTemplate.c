@@ -35,6 +35,7 @@
 #include "evmAudioTemplate.h"
 
 
+
 /** \brief Ping-pong receive buffers to be used for transfers 
  *
  * rxBuf is a dual buffer containing mixed stereo input
@@ -101,10 +102,12 @@ GIO_AppCallback appWriteCb;
 //*****************************************************************************
 // Variables globales
 //*****************************************************************************
+uint8 statusDIP0 = DIP_UP;
+uint8 statusDIP1 = DIP_UP;
+uint8 statusDIP2 = DIP_UP;
+uint8 statusDIP3 = DIP_UP;
 eMode mode = mode_LOOPBACK;
-ptrFonction pFonction = fonctionDelay;
-int32 mDelay = NO_DELAY;
-
+int32 myDelay = NO_DELAY;
 
 /**
  * \fn void main(void)
@@ -124,6 +127,8 @@ void main(void) {
 	EVMDM6437_LED_off(LED2);
 	EVMDM6437_LED_off(LED3);
 
+	//myDelay = NO_DELAY;
+	//mode = mode_LOOPBACK;
 	edma3init();
 
     printf("Audio Processing started\n");
@@ -158,13 +163,13 @@ void audiotTask()
   while(1) {
 
     /* Waiting for receive buffer and transmit buffer */
-    SEM_pend(&semRx, SYS_FOREVER);// attente sem rx
-    SEM_pend(&semTx, SYS_FOREVER);// attente sem tx
-	SEM_pend(&config, SYS_FOREVER);
+    SEM_pend(&semRx, SYS_FOREVER);					// attente sem rx
+    SEM_pend(&semTx, SYS_FOREVER);					// attente sem tx
+	SEM_pend(&semConfig, SYS_FOREVER); 				// wait on semConfig
 
-	audioProcess(rxBuf[rxDone],txBuf[txDone],NUMSAMPLES, mDelay, mode);
+	audioProcess(rxBuf[rxDone],txBuf[txDone],NUMSAMPLES, &mode, &myDelay);
 	
-	SEM_post(&semConfig);
+	SEM_post(&semConfig);							// release semConfig
   			
  	// Release input and output buffers to audio drivers
     GIO_submit(inChan, IOM_READ, rxBuf[rxDone], &rxSize, &appReadCb);
@@ -176,11 +181,14 @@ void audiotTask()
   }
 }
 
-
 //*****************************************************************************
-// Task setDelay
+// TASK getDipStatusTask
+// -statusDIPx are protected by semaphore (semDip)
+// -wait on semDip
+// -read status of all dip switch
+// -release semDip
 //*****************************************************************************
-void getDipStatus(int arg0, int arg1){
+void getDipStatusTask(int arg0, int arg1){
 	while(1){
 		SEM_pend(&semDip, SYS_FOREVER);
 		statusDIP0 = EVMDM6437_DIP_get(DIP0);
@@ -191,10 +199,14 @@ void getDipStatus(int arg0, int arg1){
 		TSK_sleep(100);
 	}
 }
+
 //*****************************************************************************
-// Task setDelay
+// TASK configProcessTask
+// -wait of semDip and semConfig
+// -configure delay and mode
+// -release semDip and semConfig
 //*****************************************************************************
-void setConfigTask(int arg0, int arg1){
+void configProcessTask(int arg0, int arg1){
 	while(1){
 		SEM_pend(&semDip, SYS_FOREVER);
 		SEM_pend(&semConfig, SYS_FOREVER);
@@ -202,27 +214,38 @@ void setConfigTask(int arg0, int arg1){
 		setMode();
 		SEM_post(&semDip);
 		SEM_post(&semConfig);
-		TSK_sleep(10);
+		TSK_sleep(100);
 	}
 }
+
 //*****************************************************************************
-// Fonction setDelay
+// FUNCTION setDelay
+// -statusDIPx and myDelay are protected by semaphore (semDip and semConfig)
+// -DIP0 down -> increase Delay until DELAY_MAX (2s)
+// -DIP1 down -> reduce Delay until NO_DELAY (0s)
 //*****************************************************************************
 void setDelay(void){
-	if(!statusDIP0 && statusDIP1){ 										// DIP0 down -> augmentation
-			mDelay = (mDelay-STEP_DELAY) <= DELAY_2S ? DELAY_2S : mDelay-STEP_DELAY;
-
+	if(statusDIP0 == DIP_DOWN && statusDIP1 == DIP_UP){
+			//Increase delay by STEP_DELAY until DELAY_MAX (2s)
+			myDelay = (myDelay-STEP_DELAY) <= DELAY_MAX ? DELAY_MAX : myDelay-STEP_DELAY;
 		}
-	if(statusDIP0 && !statusDIP1)){ 									//DIP1 down -> diminution
-			mDelay = (mDelay+STEP_DELAY) >= NO_DELAY ? NO_DELAY : mDelay+STEP_DELAY;
+	if(statusDIP0 == DIP_UP && statusDIP1 == DIP_DOWN){
+			//Reduce delay by STEP_DELAY until NO_DELAY
+			myDelay = (myDelay+STEP_DELAY) >= NO_DELAY ? NO_DELAY : myDelay+STEP_DELAY;
 		}
 }
+
 //*****************************************************************************
-// Fonction setMode
+// FUNCTION setMode
+// -statusDIP3, mode and myDelay are protected by semaphore (semDip and semConfig)
+// -if delay 		== 0s 	-> mode_LOOPBACK
+// -if status DIP3 	== 0 	-> mode_DELAY
+// -if status DIP3 	== 1	-> mode_REVERB
 //*****************************************************************************
 void setMode(void){
-		mode = (mDelay == NO_DELAY) ? mode_LOOPBACK : statusDIP3;
+		mode = (myDelay == NO_DELAY) ? mode_LOOPBACK : (eMode)statusDIP3;
 }
+
 
 /**
  * \fn void rxCallback(Ptr arg, int32 status, Ptr bufp, uint32 size)
