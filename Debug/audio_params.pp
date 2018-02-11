@@ -29,6 +29,9 @@ audio_params.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/swi.h
 audio_params.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/hwi.h
 audio_params.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/obj.h
 audio_params.obj: C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h
+audio_params.obj: ../audioProcessing.h
+audio_params.obj: ../modulation.h
+audio_params.obj: ../evmAudioTemplate.h
 
 ../audio_params.c: 
 C:/dvsdk_1_01_00_15/psp_1_00_02_00/pspdrivers/inc/psp_audio.h: 
@@ -59,3 +62,6 @@ C:/ti/bios_5_42_01_09/packages/ti/bios/include/swi.h:
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/hwi.h: 
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/obj.h: 
 C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h: 
+../audioProcessing.h: 
+../modulation.h: 
+../evmAudioTemplate.h: 

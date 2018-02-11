@@ -5,7 +5,7 @@
 ;; INPUT evmAudioTemplate.cdb
 
 ;; CONFIGURATION/VERSION INFORMATION
-	.asg "Sun Feb 04 21:17:46 2018", VERS$DATE
+	.asg "Sun Feb 11 17:31:51 2018", VERS$DATE
 
 ;; PROLOGUE
 	.include evmAudioTemplatecfg.h62

@@ -53,9 +53,12 @@ evmAudioTemplate.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/prd.h
 evmAudioTemplate.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/trg.h
 evmAudioTemplate.obj: C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h
 evmAudioTemplate.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/_hook.h
+evmAudioTemplate.obj: ../evmAudioTemplate.h
 evmAudioTemplate.obj: ../audioProcessing.h
 evmAudioTemplate.obj: ../../CommonLib/dsp_types.h
 evmAudioTemplate.obj: ../evmAudioTemplate.h
+evmAudioTemplate.obj: ../modulation.h
+evmAudioTemplate.obj: ../audioProcessing.h
 
 ../evmAudioTemplate.c: 
 C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stdio.h: 
@@ -110,6 +113,9 @@ C:/ti/bios_5_42_01_09/packages/ti/bios/include/prd.h:
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/trg.h: 
 C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h: 
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/_hook.h: 
+../evmAudioTemplate.h: 
 ../audioProcessing.h: 
 ../../CommonLib/dsp_types.h: 
 ../evmAudioTemplate.h: 
+../modulation.h: 
+../audioProcessing.h: 

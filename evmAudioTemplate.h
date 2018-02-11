@@ -1,15 +1,10 @@
-/*
- * File     : evmAudioTemplate.h
- * Author   : Pierre BRESSY
- * Company  : HEIG-VD
- * Created  : Thu Jan 31 11:04:44 2013
- * Purpose  :
+//*****************************************************************************
+// file		: evmAudioTemplate.h
+// author	: Sylvain Reinauer
+// date		: 11.02.18
+// purpose	: Projet NTR
+//*****************************************************************************
 
- |   Date   | By  | Description of changes in evmAudioTemplate.h
- +----------+-----+-----------------------------------------------------------+
- |          |     |
-
-*/
 #ifndef _EVM_AUDIO_TEMPLATE_H_
 #define _EVM_AUDIO_TEMPLATE_H_
 
@@ -20,6 +15,12 @@
 #include <gio.h>
 #include <iom.h>
 
+#include "audioProcessing.h"
+#include "modulation.h"
+
+//*****************************************************************************
+// Preprocessor symbols
+//*****************************************************************************
 #define DIP0	 	0
 #define DIP1 		1
 #define DIP2 		2
@@ -28,10 +29,10 @@
 #define DIP_UP 		1
 #define DIP_DOWN 	0
 
-#define LED0 0
-#define LED1 1
-#define LED2 2
-#define LED3 3
+#define LED0 		0
+#define LED1 		1
+#define LED2 		2
+#define LED3 		3
 
 /**	\def BUFALIGN
  *  \brief memory alignment constraint for fast access by DSP **/
@@ -56,14 +57,16 @@
  */
 #define MAXI(a,b) (a>b?a:b)
 
-
-// prototypes
+//*****************************************************************************
+// Function's prototypes
+//*****************************************************************************
 static void startCapture();
 static void createChannels();
 static void rxCallback(Ptr arg, int32 status, Ptr bufp, uint32 size);
 static void txCallback(Ptr arg, int32 status, Ptr bufp, uint32 size);
 void setDelay(void);
-void setMode(void);
+void setProcessMode(void);
+void setModulationMode(void);
 
 /* Needed to initialize audio driver */
 extern int32 edma3init();

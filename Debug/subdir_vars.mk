@@ -14,7 +14,8 @@ C_SRCS += \
 ../audio_params.c \
 ../evmAudioTemplate.c \
 ./evmAudioTemplatecfg_c.c \
-../i2c_params.c 
+../i2c_params.c \
+../modulation.c 
 
 OBJS += \
 ./audioProcessing.obj \
@@ -22,7 +23,8 @@ OBJS += \
 ./evmAudioTemplate.obj \
 ./evmAudioTemplatecfg.obj \
 ./evmAudioTemplatecfg_c.obj \
-./i2c_params.obj 
+./i2c_params.obj \
+./modulation.obj 
 
 GEN_MISC_FILES += \
 ./evmAudioTemplate.cdb 
@@ -39,7 +41,8 @@ C_DEPS += \
 ./audio_params.pp \
 ./evmAudioTemplate.pp \
 ./evmAudioTemplatecfg_c.pp \
-./i2c_params.pp 
+./i2c_params.pp \
+./modulation.pp 
 
 GEN_CMDS += \
 ./evmAudioTemplatecfg.cmd 
@@ -66,7 +69,8 @@ C_DEPS__QUOTED += \
 "audio_params.pp" \
 "evmAudioTemplate.pp" \
 "evmAudioTemplatecfg_c.pp" \
-"i2c_params.pp" 
+"i2c_params.pp" \
+"modulation.pp" 
 
 S??_DEPS__QUOTED += \
 "evmAudioTemplatecfg.pp" 
@@ -77,14 +81,16 @@ OBJS__QUOTED += \
 "evmAudioTemplate.obj" \
 "evmAudioTemplatecfg.obj" \
 "evmAudioTemplatecfg_c.obj" \
-"i2c_params.obj" 
+"i2c_params.obj" \
+"modulation.obj" 
 
 C_SRCS__QUOTED += \
 "../audioProcessing.c" \
 "../audio_params.c" \
 "../evmAudioTemplate.c" \
 "./evmAudioTemplatecfg_c.c" \
-"../i2c_params.c" 
+"../i2c_params.c" \
+"../modulation.c" 
 
 GEN_CMDS__FLAG += \
 -l"./evmAudioTemplatecfg.cmd" 

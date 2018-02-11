@@ -28,6 +28,9 @@ audioProcessing.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/swi.h
 audioProcessing.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/hwi.h
 audioProcessing.obj: C:/ti/bios_5_42_01_09/packages/ti/bios/include/obj.h
 audioProcessing.obj: C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h
+audioProcessing.obj: ../audioProcessing.h
+audioProcessing.obj: ../modulation.h
+audioProcessing.obj: ../evmAudioTemplate.h
 
 ../audioProcessing.c: 
 ../audioProcessing.h: 
@@ -57,3 +60,6 @@ C:/ti/bios_5_42_01_09/packages/ti/bios/include/swi.h:
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/hwi.h: 
 C:/ti/bios_5_42_01_09/packages/ti/bios/include/obj.h: 
 C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include/stddef.h: 
+../audioProcessing.h: 
+../modulation.h: 
+../evmAudioTemplate.h: 

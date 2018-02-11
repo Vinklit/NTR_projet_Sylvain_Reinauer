@@ -8,6 +8,7 @@ CG_TOOL_ROOT := C:/ti/ccsv5/tools/compiler/c6000_7.4.4
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./modulation.obj" \
 "./i2c_params.obj" \
 "./evmAudioTemplatecfg_c.obj" \
 "./evmAudioTemplatecfg.obj" \
@@ -128,16 +129,16 @@ all: Labo01.out
 Labo01.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C6000 Linker'
-	"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv64+ --abi=coffabi -g --define=dm6437 --diag_warning=225 -z --stack_size=800 -m"Labo01.map" --heap_size=800 -i"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/lib" -i"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include" -i"C:/ti/bios_5_42_01_09/packages/ti/rtdx/lib/c6000" -i"C:/ti/bios_5_42_01_09/packages/ti/bios/lib" --reread_libs --warn_sections --xml_link_info="Labo01_linkInfo.xml" --rom_model -o "Labo01.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv64+ --abi=coffabi -Ooff -ms0 -g --define=dm6437 --diag_warning=225 -z --stack_size=800 -m"Labo01.map" --heap_size=800 -i"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/lib" -i"C:/ti/ccsv5/tools/compiler/c6000_7.4.4/include" -i"C:/ti/bios_5_42_01_09/packages/ti/rtdx/lib/c6000" -i"C:/ti/bios_5_42_01_09/packages/ti/bios/lib" --reread_libs --warn_sections --xml_link_info="Labo01_linkInfo.xml" --rom_model -o "Labo01.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(GEN_HDRS__QUOTED)$(GEN_MISC_FILES__QUOTED)$(C6000_EXECUTABLE_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(GEN_CMDS__QUOTED) "Labo01.out"
-	-$(RM) "audioProcessing.pp" "audio_params.pp" "evmAudioTemplate.pp" "evmAudioTemplatecfg_c.pp" "i2c_params.pp" 
+	-$(RM) "audioProcessing.pp" "audio_params.pp" "evmAudioTemplate.pp" "evmAudioTemplatecfg_c.pp" "i2c_params.pp" "modulation.pp" 
 	-$(RM) "evmAudioTemplatecfg.pp" 
-	-$(RM) "audioProcessing.obj" "audio_params.obj" "evmAudioTemplate.obj" "evmAudioTemplatecfg.obj" "evmAudioTemplatecfg_c.obj" "i2c_params.obj" 
+	-$(RM) "audioProcessing.obj" "audio_params.obj" "evmAudioTemplate.obj" "evmAudioTemplatecfg.obj" "evmAudioTemplatecfg_c.obj" "i2c_params.obj" "modulation.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

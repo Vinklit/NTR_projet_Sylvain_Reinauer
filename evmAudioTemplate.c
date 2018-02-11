@@ -1,15 +1,9 @@
-/*
- * File     : evmAudioTemplate.c
- * Author   : Pierre BRESSY
- * Company  : HEIG-VD
- * Created  : Thu Jan 31 11:04:44 2013
- * Purpose  :
-
- |   Date   | By  | Description of changes in evmAudioTemplate.c
- +----------+-----+-----------------------------------------------------------+
- |          |     |
-
-*/
+//*****************************************************************************
+// file		: evmAudioTemplate.c
+// author	: Sylvain Reinauer
+// date		: 11.02.18
+// purpose	: Projet NTR
+//*****************************************************************************
 
 /* runtime include files */
 #include <stdio.h>
@@ -31,10 +25,7 @@
 #include "evmAudioTemplatecfg.h"
 
 /* Application include files */
-#include "audioProcessing.h"
 #include "evmAudioTemplate.h"
-
-
 
 /** \brief Ping-pong receive buffers to be used for transfers 
  *
@@ -100,13 +91,15 @@ GIO_AppCallback appWriteCb;
 
 
 //*****************************************************************************
-// Variables globales
+// Global variables
 //*****************************************************************************
 uint8 statusDIP0 = DIP_UP;
 uint8 statusDIP1 = DIP_UP;
 uint8 statusDIP2 = DIP_UP;
 uint8 statusDIP3 = DIP_UP;
-eMode mode = mode_LOOPBACK;
+
+eProcessMode modeProcess = process_LOOPBACK;
+eModulationMode modeModulation = modulation_CLIPPING;
 int32 myDelay = NO_DELAY;
 
 /**
@@ -127,8 +120,6 @@ void main(void) {
 	EVMDM6437_LED_off(LED2);
 	EVMDM6437_LED_off(LED3);
 
-	//myDelay = NO_DELAY;
-	//mode = mode_LOOPBACK;
 	edma3init();
 
     printf("Audio Processing started\n");
@@ -167,7 +158,7 @@ void audiotTask()
     SEM_pend(&semTx, SYS_FOREVER);					// attente sem tx
 	SEM_pend(&semConfig, SYS_FOREVER); 				// wait on semConfig
 
-	audioProcess(rxBuf[rxDone],txBuf[txDone],NUMSAMPLES, &mode, &myDelay);
+	audioProcess(rxBuf[rxDone],txBuf[txDone],NUMSAMPLES, &modeProcess, &modeModulation, &myDelay);
 	
 	SEM_post(&semConfig);							// release semConfig
   			
@@ -191,10 +182,10 @@ void audiotTask()
 void getDipStatusTask(int arg0, int arg1){
 	while(1){
 		SEM_pend(&semDip, SYS_FOREVER);
-		statusDIP0 = EVMDM6437_DIP_get(DIP0);
-		statusDIP1 = EVMDM6437_DIP_get(DIP1);
-		statusDIP2 = EVMDM6437_DIP_get(DIP2);
-		statusDIP3 = EVMDM6437_DIP_get(DIP3);	
+		statusDIP0 = EVMDM6437_DIP_get(DIP0);		// Increase delay
+		statusDIP1 = EVMDM6437_DIP_get(DIP1);		// Reduce delay
+		statusDIP2 = EVMDM6437_DIP_get(DIP2);		// Modulation mode 	0->modulation_AVG, 1->modulation_CLIPPING
+		statusDIP3 = EVMDM6437_DIP_get(DIP3);		// Process mode		0->process_DELAY, 1->process_REVERB
 		SEM_post(&semDip);
 		TSK_sleep(100);
 	}
@@ -211,7 +202,8 @@ void configProcessTask(int arg0, int arg1){
 		SEM_pend(&semDip, SYS_FOREVER);
 		SEM_pend(&semConfig, SYS_FOREVER);
 		setDelay();
-		setMode();
+		setProcessMode();
+		setModulationMode();
 		SEM_post(&semDip);
 		SEM_post(&semConfig);
 		TSK_sleep(100);
@@ -229,7 +221,7 @@ void setDelay(void){
 			//Increase delay by STEP_DELAY until DELAY_MAX (2s)
 			myDelay = (myDelay-STEP_DELAY) <= DELAY_MAX ? DELAY_MAX : myDelay-STEP_DELAY;
 		}
-	if(statusDIP0 == DIP_UP && statusDIP1 == DIP_DOWN){
+	else if(statusDIP0 == DIP_UP && statusDIP1 == DIP_DOWN){
 			//Reduce delay by STEP_DELAY until NO_DELAY
 			myDelay = (myDelay+STEP_DELAY) >= NO_DELAY ? NO_DELAY : myDelay+STEP_DELAY;
 		}
@@ -238,12 +230,22 @@ void setDelay(void){
 //*****************************************************************************
 // FUNCTION setMode
 // -statusDIP3, mode and myDelay are protected by semaphore (semDip and semConfig)
-// -if delay 		== 0s 	-> mode_LOOPBACK
-// -if status DIP3 	== 0 	-> mode_DELAY
-// -if status DIP3 	== 1	-> mode_REVERB
+// -if delay 				== 0s 	-> process_LOOPBACK
+// -else if status DIP3 	== 0 	-> process_DELAY
+// -else if status DIP3 	== 1	-> process_REVERB
 //*****************************************************************************
-void setMode(void){
-		mode = (myDelay == NO_DELAY) ? mode_LOOPBACK : (eMode)statusDIP3;
+void setProcessMode(void){
+		modeProcess = (myDelay == NO_DELAY) ? process_LOOPBACK : (eProcessMode)statusDIP3;
+}
+
+//*****************************************************************************
+// FUNCTION setModulationType
+// -statusDIP2, modulationType are protected by semaphore (semDip and semConfig)
+// -if status DIP2 	== 0 	-> modulation_AVG
+// -if status DIP2 	== 1	-> modulation_CLIPPING
+//*****************************************************************************
+void setModulationMode(void){
+		modeModulation = statusDIP2 ? modulation_CLIPPING : modulation_AVG;
 }
 
 
